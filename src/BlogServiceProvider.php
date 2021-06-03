@@ -29,6 +29,6 @@ class BlogServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->publishes([
             __DIR__ . '/database/migrations' => database_path('migrations'),
-        ], 'blog-migrations');
+        ], 'blog/migrations');
     }
 }

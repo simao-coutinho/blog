@@ -9,7 +9,9 @@
             "email": "simaopedrocoutinho@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "intervention/image": ">=2.5.1"
+    },
     "autoload": {
         "psr-4": {
             "SimaoCoutinho\\Blog\\": "/src"
