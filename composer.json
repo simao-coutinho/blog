@@ -1,0 +1,24 @@
+{
+    "name": "simaocoutinho/blog",
+    "description": "blog",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simão Coutinho",
+            "email": "simaopedrocoutinho@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "SimaoCoutinho\\Blog\\": "/src"
+        }
+    },"extra": {
+    "laravel": {
+        "providers": [
+            "SimaoCoutinho\\Blog\\BlogServiceProvider"
+        ]
+    }
+}
+}
