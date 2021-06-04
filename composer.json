@@ -16,11 +16,12 @@
         "psr-4": {
             "SimaoCoutinho\\Blog\\": "/src"
         }
-    },"extra": {
-    "laravel": {
-        "providers": [
-            "SimaoCoutinho\\Blog\\BlogServiceProvider"
-        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SimaoCoutinho\\Blog\\BlogServiceProvider"
+            ]
+        }
     }
-}
 }

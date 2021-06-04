@@ -1,9 +1,10 @@
-@extends('backend.admin')
+@extends('admin::layout.master')
 
 @section('myStyles')
-<title>{{ env('APP_NAME') }} Categories</title>
+<title>{{ env('APP_NAME') }} Blog Categories</title>
 <meta name="description" content="">
 
+    <x-admin::table-styles />
 @endsection
 
 @section('content')
@@ -11,16 +12,15 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">{{ $title }}</h3>
+                    <h3 class="card-title">Blog Categories</h3>
                     <ul class="list-unstyled list-inline text-right">
-                        @if (isset($button))
                             <li class="d-none d-sm-inline-block">
-                                <button id="btnUpdate"
-                                        class="btn btn-success btn-sm backend-button"
-                                        onclick="{{ $button->onClick }}; return false;"><i class="fas fa-plus"></i> {{ $button->title }}
-                                </button>
+                                <a href="{{ route('admin.blogCategoryAdd') }}">
+                                    <button id="btnUpdate"
+                                            class="btn btn-success btn-sm backend-button"><i class="fas fa-plus"></i> Add Category
+                                    </button>
+                                </a>
                             </li>
-                        @endif
                     </ul>
                     <div class="table-responsive py-3">
                         <table id="myTable" class="myTable cursor table table-bordered table-striped">
@@ -33,7 +33,7 @@
                             </thead>
                             <tbody>
                             @foreach ($categories as $category)
-                                <tr onclick="document.location = '{{ route($route, ["id" => $category->id]) }}'">
+                                <tr onclick="document.location = '{{ route("admin.blogCategoryShow", ["id" => $category->id]) }}'">
                                     <td>{{ $category->id }}</td>
                                     <td>{{ $category->title }}</td>
                                     <td>
@@ -55,13 +55,12 @@
 @endsection
 
 @section('myScripts')
+    <x-admin::table-scripts />
+
     <script>
         var table = $('#myTable').DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-            "language": {
-                url: '{{ asset('public/plugins/datatables/translation.json') }}'
-            },
             "order": [[0, 'desc']],
             initComplete: function () {
                 setTimeout(function () {

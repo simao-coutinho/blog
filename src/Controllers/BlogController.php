@@ -122,17 +122,12 @@ class BlogController extends Controller
 
     public function blogCategories()
     {
-        $button = new Button();
-        $button->title = "Add Category";
-        $button->onClick = "document.location = '" . route("categoryNewsAdd") . "'";
-
         $blogCategory = BlogCategory::where("deleted", 0)
             ->get();
 
-        return view("backend.categories", [
+        return view("blog::blogCategories", [
             "title" => "Category News",
             "categories" => $blogCategory,
-            "button" => $button,
             "route" => "categoryNewsShow"
         ]);
     }
