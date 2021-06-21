@@ -56,17 +56,4 @@
 
 @section('myScripts')
     <x-admin::table-scripts />
-
-    <script>
-        var table = $('#myTable').DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-            "order": [[0, 'desc']],
-            initComplete: function () {
-                setTimeout(function () {
-                    table.buttons().container().appendTo('#myTable_wrapper .col-md-6:eq(0)');
-                }, 10);
-            }
-        });
-    </script>
 @endsection

@@ -4,7 +4,7 @@
     <title>{{ env('APP_NAME') }} Blog Category</title>
     <meta name="description" content="">
 
-
+<x-admin-summernote-styles />
 @endsection
 
 @section('content')
@@ -15,11 +15,13 @@
                     <h3 class="card-title">Blog Category</h3>
                     <ul class="list-unstyled list-inline text-right">
                         <li class="d-none d-sm-inline-block">
-                            <button id="btnDelete"
-                                    class="btn btn-outline-danger btn-sm backend-button"
-                                    onclick="deleteBlogCategory({{ $category->id }}); return false;"><i
-                                    class="far fa-trash-alt"></i> Delete
-                            </button>
+                            @if (isset($category))
+                                <button id="btnDelete"
+                                        class="btn btn-outline-danger btn-sm backend-button"
+                                        onclick="deleteBlogCategory({{ $category->id }}); return false;"><i
+                                        class="far fa-trash-alt"></i> Delete
+                                </button>
+                            @endif
                         </li>
                         <li class="d-none d-sm-inline-block ml-2">
                             <button id="btnSave"
@@ -42,7 +44,7 @@
                         <input type="hidden" name="id" id="id" value="{{ isset($category) ? $category->id : 0 }}">
 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="title">Title</label>
                                     <input class="form-control form-control-sm" type="text" name="title"
@@ -52,6 +54,8 @@
                                         @endif>
                                 </div>
                             </div>
+                            <x-admin::input col="6" label="Url Alias" id="url_alias" :value="isset($category) ? $category->url_alias : ''"/>
+                            <x-admin::summernote-content col="12" id="description" label="Description" />
                             @if (isset($category))
                                 <div class="col-md-2">
                                     <label class="b-contain text-center">
@@ -75,6 +79,7 @@
 @endsection
 
 @section('myScripts')
+    <x-admin-summernote-scripts />
 
     <!-- jquery-validation -->
     <script src="{{ asset('vendor/simao-coutinho/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
@@ -84,9 +89,13 @@
         $("#blog-category-form").validate({
             rules: {
                 title: "required",
+                description: "required",
+                alias: "required"
             },
             messages: {
                 title: "Title is missing",
+                description: "Description is missing",
+                alias: "Url aliad is missing"
             },
             errorElement: 'span',
             errorPlacement: function (error, element) {

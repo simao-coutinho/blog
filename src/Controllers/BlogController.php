@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use SimaoCoutinho\Blog\Models\Blog;
 use SimaoCoutinho\Blog\Models\BlogCategory;
+use SimaoCoutinho\Blog\Models\BlogCategoryDescription;
 use SimaoCoutinho\Blog\Models\BlogCategoryRelationship;
 
 class BlogController extends Controller
@@ -126,26 +127,18 @@ class BlogController extends Controller
             ->get();
 
         return view("blog::blogCategories", [
-            "title" => "Category News",
-            "categories" => $blogCategory,
-            "route" => "categoryNewsShow"
+            "categories" => $blogCategory
         ]);
     }
 
     public function blogCategoryAdd()
     {
-        return view("backend.categoryShow", [
-            "title" => "Category News",
-            "route" => "admin/categoryNews/"
-        ]);
+        return view("blog::blogCategoryShow");
     }
 
     public function blogCategoryShow($id)
     {
-        return view("backend.categoryShow", [
-            "title" => "CategoryNews",
-            "route" => "admin/categoryNews/",
-            "buttonDelete" => TRUE,
+        return view("blog::blogCategoryShow", [
             "category" => BlogCategory::findOrFail($id),
         ]);
     }
@@ -159,10 +152,14 @@ class BlogController extends Controller
             $categoryNews = BlogCategory::findOrFail($request->id);
             $categoryNews->state = isset($request->checkState) ? 1 : 0;
         }
-
-        $categoryNews->title = $request->title;
-        $categoryNews->url_alias = Str::slug($request->title, "-");
         $categoryNews->save();
+
+        $categoryDescription = BlogCategoryDescription::whereBlogCategoryId($categoryNews->id)->whereLanguageId(0)->firstOrNew();
+
+        $categoryDescription->title = $request->title;
+        $categoryDescription->description = $request->description;
+        $categoryDescription->url_alias = $request->url_alias;
+        $categoryDescription->save();
 
         return response()->json(["status" => TRUE]);
     }

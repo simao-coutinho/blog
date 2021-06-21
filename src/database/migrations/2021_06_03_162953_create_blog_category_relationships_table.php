@@ -12,6 +12,7 @@ class CreateBlogCategoryRelationshipsTable extends Migration
             $table->bigIncrements('id')->start_from(3285);
             $table->bigInteger('blog_id');
             $table->bigInteger('blog_category_id');
+            $table->timestamps();
 
             $table->index(['blog_id', 'blog_category_id']);
         });

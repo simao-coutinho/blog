@@ -11,7 +11,7 @@ Route::prefix("blog")->group(function () {
     Route::post("/delete", [BlogController::class, "blogDelete"])->name("admin.blogDelete");
 });
 
-Route::prefix("blogCategory")->group(function () {
+Route::group(['middleware' => 'web', 'prefix' => 'blogCategory'], function () {
     Route::get("/", [BlogController::class, "blogCategories"])->name("admin.blogCategories");
     Route::get("/add", [BlogController::class, "blogCategoryAdd"])->name("admin.blogCategoryAdd");
     Route::get("/show/{id}", [BlogController::class, "blogCategoryShow"])->name("admin.blogCategoryShow");
