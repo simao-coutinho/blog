@@ -35,7 +35,7 @@
                             @foreach ($categories as $category)
                                 <tr onclick="document.location = '{{ route("admin.blogCategoryShow", ["id" => $category->id]) }}'">
                                     <td>{{ $category->id }}</td>
-                                    <td>{{ $category->title }}</td>
+                                    <td>{{ $category['description']['title'] }}</td>
                                     <td>
                                         @if ($category->state == 1)
                                             <span class="badge badge-success text-bold fs-12">Active</span>

@@ -6,7 +6,7 @@
     <x-admin::nav-item label="Categorias" :route="route('admin.blogCategories')">
         <i class="nav-icon far fa-newspaper"></i>
     </x-admin::nav-item>
-    <x-admin::nav-item label="Noticias" :route="route('admin.blogs)">
+    <x-admin::nav-item label="Noticias" :route="route('admin.blogs')">
         <i class="nav-icon far fa-newspaper"></i>
     </x-admin::nav-item>
 </x-admin::nav-tree>

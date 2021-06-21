@@ -1,15 +1,14 @@
-@extends('backend.admin')
+@extends('admin::layout.master')
 
 @section('myStyles')
     <title>{{ env('APP_NAME') }}</title>
     <meta name="description" content="">
 
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset("public/plugins/select2/css/select2.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("public/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css") }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"/>
 
-    <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset("public/plugins/summernote/summernote-bs4.css") }}">
+
+    <x-admin::summernote-styles/>
 @endsection
 
 @section('content')
@@ -26,7 +25,8 @@
                                 @if (isset($blog))
                                     <li class="d-none d-sm-inline-block">
                                         <a class="btn btn-outline-secondary btn-sm backend-button" target="_blank"
-                                           href="{{ route('newsSingle', ['url_alias' => $blog->url_alias]) }}">
+                                            {{--                                           href="{{ route('newsSingle', ['url_alias' => $blog->url_alias]) }}"--}}
+                                        >
                                             <i class="fas fa-link"></i> Open In Website
                                         </a>
                                     </li>
@@ -45,10 +45,18 @@
                                         <i class="fas fa-save"></i> Save
                                     </button>
                                 </li>
+                                <li class="d-none d-sm-inline-block ml-2">
+                                    <a href="{{ route('admin.blogs') }}">
+                                        <button class="btn btn-outline-secondary btn-sm backend-button">
+                                            <i class="fas fa-reply"></i> Back
+                                        </button>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
-                    <form id="formId" class="mt-4" enctype="multipart/form-data" method="post" action="{{ route("newsUpdate") }}">
+                    <form id="formId" class="mt-4" enctype="multipart/form-data" method="post"
+                          action="{{ route("admin.blogUpdate") }}">
                         @csrf
                         <input type="hidden" name="id" id="id" value="{{ isset($blog) ? $blog->id : 0 }}">
                         <input type="hidden" name="oldDate" id="oldDate" value="{{ isset($blog) ? $blog->date : 0 }}">
@@ -61,8 +69,8 @@
                                             <input type="text" class="form-control form-control-sm" id="title"
                                                    name="title"
                                                    @if (isset($blog))
-                                                   value="{{ $blog->title }}"
-                                                    @endif required>
+                                                   value="{{ $blog->description->title }}"
+                                                   @endif required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -72,7 +80,7 @@
                                                    name="post_date" placeholder="YYYY-MM-DD"
                                                    @if (isset($blog))
                                                    value="{{ $blog->date }}"
-                                                    @endif required>
+                                                   @endif required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -84,13 +92,13 @@
                                                 @foreach ($blogCategories as $category)
                                                     <option value="{{ $category->id }}"
                                                             @if (isset($blog))
-                                                            @foreach ($blog->blogCategory as $blogCategory)
-                                                            @if ($blogCategory->category_id == $category->id)
+                                                            @foreach ($blog->blogCategories as $blogCategory)
+                                                            @if ($blogCategory->blog_category_id == $category->id)
                                                             selected
-                                                            @endif
-                                                            @endforeach
-                                                            @endif>
-                                                        {{ $category->title }}
+                                                        @endif
+                                                        @endforeach
+                                                        @endif>
+                                                        {{ $category->description->title }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -101,7 +109,8 @@
                                             <label for="summary">Sumary</label>
                                             <textarea type="text" class="form-control form-control-sm" id="summary"
                                                       name="summary" rows="4"
-                                                      maxlength="300" required>@if (isset($blog)){{ $blog->summary }}@endif</textarea>
+                                                      maxlength="300"
+                                                      required>@if (isset($blog)){{ $blog->description->summary }}@endif</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -111,7 +120,7 @@
                                                        id="state"
                                                        @if ((isset($blog) && $blog->state == 1) || !isset($blog))
                                                        checked
-                                                        @endif>
+                                                    @endif>
                                                 <label class="custom-control-label font-13-px pt-1"
                                                        for="state">Active</label>
                                             </div>
@@ -124,7 +133,7 @@
                                                        id="featured"
                                                        @if (isset($blog) && $blog->featured == 1)
                                                        checked
-                                                        @endif>
+                                                    @endif>
                                                 <label class="custom-control-label font-13-px pt-1"
                                                        for="featured">Featured</label>
                                             </div>
@@ -152,10 +161,9 @@
                                     <label for="text">Text</label>
                                     <textarea type="text" class="form-control form-control-sm summernote" id="text"
                                               name="text"
-                                              rows="10" required>@if (isset($blog)){!! $blog->text !!}@endif</textarea>
+                                              rows="10" required>@if (isset($blog)){!! $blog->description->text !!}@endif</textarea>
                                 </div>
                             </div>
-                            <input type="submit" class="d-none" id="submitButton">
                         </div>
                     </form>
                 </div>
@@ -165,25 +173,39 @@
 @endsection
 
 @section('myScripts')
-    <script src="{{ asset("public/js/backend/category.min.js") }}"></script>
-
     <!-- Select2 -->
-    <script src="{{ asset("public/plugins/select2/js/select2.full.min.js") }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
 
-    <!-- Summernote -->
-    <script src="{{ asset("public/plugins/summernote/summernote-bs4.min.js") }}"></script>
+    <x-admin::summernote-scripts/>
 
     <!-- InputMask -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
 
     <!-- jquery-validation -->
-    <script src="{{ asset('public/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('public/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+    <script src="{{ asset('vendor/simao-coutinho/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('vendor/simao-coutinho/plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
     <script>
         $('.select2').select2();
-        $('.summernote').summernote({
-            height: 400,
+
+        $("#formId").validate({
+            rules: {
+                img: {
+                    required: true,
+                    accept: "image/*"
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
         });
 
         let oldDate = document.getElementById("oldDate").value;
@@ -199,7 +221,31 @@
         }
 
         function savePressed() {
-            $('#submitButton').click();
+            if ($("#formId").valid()) {
+                $("#formId").submit();
+            }
+        }
+
+        function deleteCategory(id, url) {
+            const response = confirm("Do you want to delete this item?");
+
+            if (response === true) {
+                let btn = document.getElementById("btnDelete");
+                btn.innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin.blogDelete') }}",
+                    data: {id: id},
+                    success: function (response) {
+                        btn.innerHTML = "Deleted";
+
+                        setTimeout(function () {
+                            window.location.href = "{{ route('admin.blogs') }}"
+                        }, 300);
+                    }
+                });
+            }
         }
     </script>
 @endsection

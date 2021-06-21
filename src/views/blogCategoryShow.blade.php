@@ -39,7 +39,7 @@
                         </li>
                     </ul>
 
-                    <form id="blog-category-form" class="mt-4">
+                    <form id="blog-category-form" class="mt-4" method="post">
                         @csrf
                         <input type="hidden" name="id" id="id" value="{{ isset($category) ? $category->id : 0 }}">
 
@@ -50,12 +50,12 @@
                                     <input class="form-control form-control-sm" type="text" name="title"
                                            id="title" placeholder="Title"
                                            @if(isset($category))
-                                           value="{{ $category->title }}"
+                                           value="{{ $category->description->title }}"
                                         @endif>
                                 </div>
                             </div>
-                            <x-admin::input col="6" label="Url Alias" id="url_alias" :value="isset($category) ? $category->url_alias : ''"/>
-                            <x-admin::summernote-content col="12" id="description" label="Description" />
+                            <x-admin::input col="6" label="Url Alias" id="url_alias" :value="isset($category) ? $category->description->url_alias : ''"/>
+                            <x-admin::summernote-content col="12" id="description" label="Description" :value="isset($category) ? $category->description->description : ''" />
                             @if (isset($category))
                                 <div class="col-md-2">
                                     <label class="b-contain text-center">
@@ -89,13 +89,11 @@
         $("#blog-category-form").validate({
             rules: {
                 title: "required",
-                description: "required",
-                alias: "required"
+                url_alias: "required"
             },
             messages: {
                 title: "Title is missing",
-                description: "Description is missing",
-                alias: "Url aliad is missing"
+                url_alias: "Url alias is missing"
             },
             errorElement: 'span',
             errorPlacement: function (error, element) {
@@ -113,19 +111,19 @@
         function updateBlogCategory() {
             if ($("#blog-category-form").valid()) {
                 let btn = document.getElementById("btnSave");
-                btn.prop('disabled', true);
+                btn.disabled = true;
                 btn.innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
 
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.blogCategoryUpdate') }}",
-                    data: $("#formId").serialize(),
+                    data: $("#blog-category-form").serialize(),
                     success: function (response) {
                         btn.innerHTML = "Saved";
 
                         setTimeout(function () {
                             window.location.href = "{{ route('admin.blogCategories') }}"
-                        }, delay);
+                        }, 300);
                     }
                 });
             }
@@ -136,19 +134,19 @@
 
             if (response === true) {
                 let btn = document.getElementById("btnDelete");
-                btn.prop('disabled', true);
+                btn.disabled = true;
                 btn.innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
 
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.blogCategoryDelete') }}",
-                    data: {_token: CSRF_TOKEN, id: id},
+                    data: {id: id},
                     success: function (response) {
                         btn.innerHTML = "Deleted";
 
                         setTimeout(function () {
                             window.location.href = "{{ route('admin.blogCategories') }}"
-                        }, delay);
+                        }, 300);
                     }
                 });
             }

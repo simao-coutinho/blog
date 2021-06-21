@@ -9,19 +9,16 @@
             "email": "simaopedrocoutinho@gmail.com"
         }
     ],
-    "require": {
-        "intervention/image": ">=2.5.1"
-    },
+    "require": {},
     "autoload": {
         "psr-4": {
             "SimaoCoutinho\\Blog\\": "/src"
         }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "SimaoCoutinho\\Blog\\BlogServiceProvider"
-            ]
-        }
+    },"extra": {
+    "laravel": {
+        "providers": [
+            "SimaoCoutinho\\Blog\\BlogServiceProvider"
+        ]
     }
+}
 }

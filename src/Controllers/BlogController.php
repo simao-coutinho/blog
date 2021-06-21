@@ -11,29 +11,31 @@ use SimaoCoutinho\Blog\Models\Blog;
 use SimaoCoutinho\Blog\Models\BlogCategory;
 use SimaoCoutinho\Blog\Models\BlogCategoryDescription;
 use SimaoCoutinho\Blog\Models\BlogCategoryRelationship;
+use SimaoCoutinho\Blog\Models\BlogDescription;
 
 class BlogController extends Controller
 {
+    //region Blogs
     public function blogs()
     {
         $blogs = Blog::where('deleted', 0)->get();
 
-        return view('backend.news', [
+        return view('blog::blogs', [
             "blogs" => $blogs
         ]);
     }
 
     public function blogAdd()
     {
-        return view('backend.newsShow', [
-            "blogCategories" => BlogCategory::where("deleted", 0)->where("state", 1)->orderBy("title")->get()
+        return view('blog::blogShow', [
+            "blogCategories" => BlogCategory::where("deleted", 0)->where("state", 1)->get()
         ]);
     }
 
     public function blogShow($id)
     {
-        return view('backend.newsShow', [
-            "blogCategories" => BlogCategory::where("deleted", 0)->where("state", 1)->orderBy("title")->get(),
+        return view('blog::blogShow', [
+            "blogCategories" => BlogCategory::where("deleted", 0)->where("state", 1)->get(),
             "blog" => Blog::findOrFail($id)
         ]);
     }
@@ -56,14 +58,14 @@ class BlogController extends Controller
                 $constraint->aspectRatio();
             })->save($destinationPath . '/' . $input['imagename']);
 
-            $blog->image = '/public/uploads/blog/img/' . $input['imagename'];
+            $blog->image = '/uploads/blog/img/' . $input['imagename'];
         }
 
         $video = $request->file('video');
         if (empty($video) == FALSE) {
             $fileExtension = strtolower($video->getClientOriginalExtension());
             $fileName = Str::slug($request->title, "-") . '-' . time() . '.' . $fileExtension;
-            $urlVideo = '/public/uploads/blog/video/' . $fileName;
+            $urlVideo = '/uploads/blog/video/' . $fileName;
 
             if (!file_exists(public_path() . '/uploads/blog/video/'))
                 mkdir(public_path() . '/uploads/blog/video/', 0777, true);
@@ -73,43 +75,47 @@ class BlogController extends Controller
             $blog->video = $urlVideo;
         }
 
-        $url_alias = Str::slug($request->title, "-");
-
-        $blog->title = $request->title;
-        $blog->url_alias = $url_alias;
-        $blog->text = $request->text;
         $blog->date = $request->post_date;
-        $blog->summary = $request->summary;
         $blog->featured = isset($request->featured) ? 1 : 0;
         $blog->state = isset($request->state) ? 1 : 0;
         $blog->save();
 
-        if (Blog::where('id', '!=', $blog->id)->where('url_alias', $url_alias)->exists()) {
-            $url_alias .= '-' . $blog->id;
+        $blogDescription = BlogDescription::whereLanguageId(0)->whereBlogId($blog->id)->firstOrNew();
+        $url_alias = Str::slug($request->title, "-");
+        $blogDescription->language_id = 0;
+        $blogDescription->blog_id = $blog->id;
+        $blogDescription->title = $request->title;
+        $blogDescription->url_alias = $url_alias;
+        $blogDescription->text = $request->text;
+        $blogDescription->summary = $request->summary;
+        $blogDescription->save();
 
-            Blog::where('id', $blog->id)->update(['url_alias' => $url_alias]);
+        if (BlogDescription::where('id', '!=', $blogDescription->id)->where('url_alias', $url_alias)->exists()) {
+            $url_alias .= '-' . $blogDescription->id;
+
+            BlogDescription::where('id', $blogDescription->id)->update(['url_alias' => $url_alias]);
         }
 
         if (isset($request->categories)) {
             BlogCategoryRelationship::where("blog_id", $blog->id)
-                ->whereNotIn("category_id", $request->categories)
+                ->whereNotIn("blog_category_id", $request->categories)
                 ->delete();
 
             foreach ($request->categories as $category) {
                 $count = BlogCategoryRelationship::where("blog_id", $blog->id)
-                    ->where("category_id", $category)
+                    ->where("blog_category_id", $category)
                     ->count();
 
                 if ($count == 0) {
                     $blogCategory = new BlogCategoryRelationship();
                     $blogCategory->blog_id = $blog->id;
-                    $blogCategory->category_id = $category;
+                    $blogCategory->blog_category_id = $category;
                     $blogCategory->save();
                 }
             }
         }
 
-        return response()->redirectToRoute("news");
+        return redirect()->route('admin.blogs');
     }
 
     public function blogDelete(Request $request)
@@ -120,7 +126,9 @@ class BlogController extends Controller
 
         return response()->json(["status" => TRUE]);
     }
+    //endregion
 
+    //region Blog Category
     public function blogCategories()
     {
         $blogCategory = BlogCategory::where("deleted", 0)
@@ -155,8 +163,8 @@ class BlogController extends Controller
         $categoryNews->save();
 
         $categoryDescription = BlogCategoryDescription::whereBlogCategoryId($categoryNews->id)->whereLanguageId(0)->firstOrNew();
-
-        $categoryDescription->title = $request->title;
+        $categoryDescription->blog_category_id = $categoryNews->id;
+        $categoryDescription->title = $request->input('title');
         $categoryDescription->description = $request->description;
         $categoryDescription->url_alias = $request->url_alias;
         $categoryDescription->save();
@@ -172,4 +180,5 @@ class BlogController extends Controller
 
         return response()->json(["status" => TRUE]);
     }
+    //endregion
 }

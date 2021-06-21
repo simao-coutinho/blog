@@ -1,9 +1,10 @@
-@extends('backend.admin')
+@extends('admin::layout.master')
 
 @section('myStyles')
 <title>{{ env('APP_NAME') }}</title>
 <meta name="description" content="">
 
+    <x-admin::table-styles />
 @endsection
 
 @section('content')
@@ -11,11 +12,11 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">News</h3>
+                    <h3 class="card-title">Notícias</h3>
                     <ul class="list-unstyled list-inline text-right">
                             <li class="d-none d-sm-inline-block">
-                                <a id="btnUpdate" href="{{ route('newsAdd') }}"
-                                        class="btn btn-success btn-sm backend-button"><i class="fas fa-plus"></i> Add News
+                                <a id="btnUpdate" href="{{ route('admin.blogAdd') }}"
+                                        class="btn btn-success btn-sm backend-button"><i class="fas fa-plus"></i> Adicionar Notícia
                                 </a>
                             </li>
                     </ul>
@@ -32,9 +33,9 @@
                             </thead>
                             <tbody>
                             @foreach ($blogs as $news)
-                                <tr onclick="document.location = '{{ route("newsShow", ["id" => $news->id]) }}'">
+                                <tr onclick="document.location = '{{ route("admin.blogShow", ["id" => $news->id]) }}'">
                                     <td>{{ $news->id }}</td>
-                                    <td>{{ $news->title }}</td>
+                                    <td>{{ $news->description->title }}</td>
                                     <td>{{ $news->date }}</td>
                                     <td>
                                         @if ($news->featured == 1)
@@ -62,19 +63,5 @@
 @endsection
 
 @section('myScripts')
-    <script>
-        var table = $('#myTable').DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-            "language": {
-                url: '{{ asset('public/plugins/datatables/translation.json') }}'
-            },
-            "order": [[0, 'desc']],
-            initComplete: function () {
-                setTimeout(function () {
-                    table.buttons().container().appendTo('#myTable_wrapper .col-md-6:eq(0)');
-                }, 10);
-            }
-        });
-    </script>
+    <x-admin::table-scripts />
 @endsection
