@@ -3,6 +3,7 @@
 namespace SimaoCoutinho\Blog;
 
 use Illuminate\Support\ServiceProvider;
+use SimaoCoutinho\Blog\Components\BlogNavItem;
 
 class BlogServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,10 @@ class BlogServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadViewComponentsAs('admin', [
+            BlogNavItem::class
+        ]);
+
         $this->loadViewsFrom(__DIR__ . '/views', 'blog');
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
 

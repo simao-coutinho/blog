@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use SimaoCoutinho\Blog\Controllers\BlogController;
 
 Route::prefix("blog")->group(function () {
-    Route::get("/", [BlogController::class, "blogs"])->name("admin.blog");
+    Route::get("/", [BlogController::class, "blogs"])->name("admin.blogs");
     Route::get("/add", [BlogController::class, "blogAdd"])->name("admin.blogAdd");
     Route::get("/show/{id}", [BlogController::class, "blogShow"])->name("admin.blogShow");
     Route::post("/update", [BlogController::class, "blogUpdate"])->name("admin.blogUpdate");
