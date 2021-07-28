@@ -16,7 +16,7 @@ class BlogCategories extends Component
     {
         $blogCategories = BlogCategory::whereDeleted(0)->whereState(1)->orderBy('position')->limit(6)->get();
 
-        return view('blog::blogCategories', [
+        return view('blog::components.blog-categories', [
             'blogCategories' => $blogCategories
         ]);
     }

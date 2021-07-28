@@ -13,7 +13,7 @@ class CreateBlogDescriptionsTable extends Migration
             $table->bigInteger('blog_id');
             $table->bigInteger('language_id');
             $table->text('title');
-            $table->text('text');
+            $table->longText('text')->nullable();
             $table->text('summary');
             $table->text('url_alias');
             $table->timestamps();

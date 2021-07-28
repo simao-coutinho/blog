@@ -1,13 +1,15 @@
-<div class="top-score-title col-md-12 right-title">
-    <div  style="background-color: #f4f4f4; border-radius: 5px;margin-left: -15px;padding-left: 15px;">
-        <h3 style="padding-top: 15px;">Categorias</h3>
+<div class="block-categories">
+    <h4>Categorias</h4>
+    <ul>
         @foreach($blogCategories as $blogCategory)
-            <a href="{{ route('noticias', ['categoria' => $blogCategory->description->url_alias]) }}">
-                <div class="right-content" style="padding-bottom: 0">
-                    <p class="news-title-right">{{ $blogCategory->description->title }} ({{ $blogCategory->posts()->count() }})</p>
-                </div>
-            </a>
+            <li>
+                <a href="{{ route('noticias', ['categoria' => $blogCategory->description->url_alias]) }}" class="font-13-px text-secondary">
+                    {{ $blogCategory->description->title }}
+                </a>
+                <span class="dots"></span>
+                <span class="count">{{ $blogCategory->posts()->count() }}</span>
+            </li>
         @endforeach
-    </div>
+    </ul>
 </div>
 

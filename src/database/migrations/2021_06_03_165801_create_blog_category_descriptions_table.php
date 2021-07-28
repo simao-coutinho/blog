@@ -13,7 +13,7 @@ class CreateBlogCategoryDescriptionsTable extends Migration
             $table->bigInteger('blog_category_id');
             $table->integer('language_id')->default(0);
             $table->text('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->text('url_alias');
             $table->timestamps();
 

@@ -1,4 +1,4 @@
-@extends('admin::layout.master')
+@extends('backend.admin')
 
 @section('myStyles')
     <title>{{ env('APP_NAME') }}</title>
@@ -54,7 +54,7 @@
                             </ul>
                         </div>
                     </div>
-                    <form id="formId" class="mt-4" enctype="multipart/form-data" method="post"
+                    <form id="blogForm" class="mt-4" enctype="multipart/form-data" method="post"
                           action="{{ route("admin.blogUpdate") }}">
                         @csrf
                         <input type="hidden" name="id" id="id" value="{{ isset($blog) ? $blog->id : 0 }}">
@@ -180,14 +180,12 @@
     <!-- InputMask -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
 
-    <!-- jquery-validation -->
-    <script src="{{ asset('vendor/simao-coutinho/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('vendor/simao-coutinho/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+    <x-admin::validation />
 
     <script>
         $('.select2').select2();
 
-        $("#formId").validate({
+        $("#blogForm").validate({
             rules: {
                 img: {
                     required: false,
@@ -220,8 +218,8 @@
         }
 
         function savePressed() {
-            if ($("#formId").valid()) {
-                $("#formId").submit();
+            if ($("#blogForm").valid()) {
+                $("#blogForm").submit();
             }
         }
 

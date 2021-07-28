@@ -14,7 +14,7 @@ class BlogMostSeen extends Component
      */
     public function render()
     {
-        $blogs = Blog::whereDeleted(false)->whereState(true)->orderByDesc('total_clicks')->limit(3)->get();
+        $blogs = Blog::whereDeleted(false)->whereState(true)->where('date', ">=", "NOW()")->orderByDesc('total_clicks')->limit(3)->get();
 
         return view('blog::components.blog-most-seen', [
             'mostSeenBlogs' => $blogs

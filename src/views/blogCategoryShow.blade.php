@@ -1,10 +1,10 @@
-@extends('admin::layout.master')
+@extends('backend.admin')
 
 @section('myStyles')
     <title>{{ env('APP_NAME') }} Blog Category</title>
     <meta name="description" content="">
 
-<x-admin-summernote-styles />
+<x-admin::summernote-styles />
 @endsection
 
 @section('content')
@@ -79,11 +79,9 @@
 @endsection
 
 @section('myScripts')
-    <x-admin-summernote-scripts />
+    <x-admin::summernote-scripts />
 
-    <!-- jquery-validation -->
-    <script src="{{ asset('vendor/simao-coutinho/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('vendor/simao-coutinho/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+    <x-admin::validation />
 
     <script>
         $("#blog-category-form").validate({

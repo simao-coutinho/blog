@@ -5,7 +5,7 @@ namespace SimaoCoutinho\Blog\Components;
 use Illuminate\View\Component;
 use SimaoCoutinho\Blog\Models\Blog;
 
-class LatestBlog extends Component
+class BlogFeatured extends Component
 {
     /**
      * Get the view / contents that represent the component.
@@ -14,10 +14,10 @@ class LatestBlog extends Component
      */
     public function render()
     {
-        $blogs = Blog::whereDeleted(false)->whereState(true)->where('date', ">=", "NOW()")->orderByDesc('created_at')->limit(3)->get();
+        $blogFeatureds = Blog::whereDeleted(false)->whereState(true)->where('date', ">=", "NOW()")->whereFeatured(true)->limit(4)->get();
 
-        return view('blog::components.latest-blog', [
-            'latestBlogs' => $blogs
+        return view('blog::components.blog-featured', [
+            'blogFeatureds' => $blogFeatureds
         ]);
     }
 }

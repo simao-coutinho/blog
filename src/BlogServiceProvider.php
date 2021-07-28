@@ -3,7 +3,11 @@
 namespace SimaoCoutinho\Blog;
 
 use Illuminate\Support\ServiceProvider;
+use SimaoCoutinho\Blog\Components\BlogCategories;
+use SimaoCoutinho\Blog\Components\BlogFeatured;
+use SimaoCoutinho\Blog\Components\BlogMostSeen;
 use SimaoCoutinho\Blog\Components\BlogNavItem;
+use SimaoCoutinho\Blog\Components\LatestBlog;
 
 class BlogServiceProvider extends ServiceProvider
 {
@@ -15,6 +19,13 @@ class BlogServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->make('SimaoCoutinho\Blog\Controllers\BlogController');
+
+        $this->loadViewComponentsAs('blog', [
+            BlogCategories::class,
+            LatestBlog::class,
+            BlogMostSeen::class,
+            BlogFeatured::class
+        ]);
     }
 
     /**

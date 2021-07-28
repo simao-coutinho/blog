@@ -1,4 +1,4 @@
-@extends('admin::layout.master')
+@extends('backend.admin')
 
 @section('myStyles')
 <title>{{ env('APP_NAME') }} Blog Categories</title>

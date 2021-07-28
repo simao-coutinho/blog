@@ -1,10 +1,12 @@
-<div class="top-score-title col-md-12 right-title">
-    <h3>Notícias mais vistas</h3>
-    @foreach($mostSeenBlogs as $mostSeenBlog)
-        <div class="right-content">
-            <p class="news-title-right">{{ $mostSeenBlog->description->title }}</p>
-            <p class="txt-right">{{ $mostSeenBlog->description->summary }}</p>
-            <a href="{{ route('noticia_single', ['url' => $mostSeenBlog->description->url_alias]) }}" class="ca-more"><i class="fa fa-angle-double-right"></i>ver mais...</a>
-        </div>
-    @endforeach
+<div class="block-posts-most-viewed mt-5">
+    <h4>Posts mais vistos</h4>
+    <ul>
+        @foreach($mostSeenBlogs as $mostSeenBlog)
+            <li>
+                <a href="{{ route('noticia_single', ['url' => $mostSeenBlog->description->url_alias]) }}" class="font-13-px">
+                    {{ $mostSeenBlog->description->title }}
+                </a>
+            </li>
+        @endforeach
+    </ul>
 </div>

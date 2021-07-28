@@ -13,6 +13,7 @@ class CreateBlogsTable extends Migration
             $table->date('date');
             $table->text('image')->nullable();
             $table->text('video')->nullable();
+            $table->integer('total_clicks')->default(0);
             $table->boolean('featured')->default(0);
             $table->boolean('state')->default(1);
             $table->boolean('deleted')->default(0);
