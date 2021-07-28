@@ -13,6 +13,6 @@ class BlogNavItem extends Component
      */
     public function render()
     {
-        return view('components.blog-nav-item');
+        return view('blog::components.blog-nav-item');
     }
 }

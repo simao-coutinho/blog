@@ -25,8 +25,7 @@
                                 @if (isset($blog))
                                     <li class="d-none d-sm-inline-block">
                                         <a class="btn btn-outline-secondary btn-sm backend-button" target="_blank"
-                                            {{--                                           href="{{ route('newsSingle', ['url_alias' => $blog->url_alias]) }}"--}}
-                                        >
+                                           href="{{ route('noticia_single', ['url' => $blog->description->url_alias]) }}">
                                             <i class="fas fa-link"></i> Open In Website
                                         </a>
                                     </li>
@@ -191,7 +190,7 @@
         $("#formId").validate({
             rules: {
                 img: {
-                    required: true,
+                    required: false,
                     accept: "image/*"
                 },
             },

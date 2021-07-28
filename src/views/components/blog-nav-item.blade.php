@@ -1,4 +1,4 @@
-<x-admin::nav-tree label="Notícias">
+<x-admin::nav-tree label="Notícias" :route="route('admin.blogs')">
     <x-slot name="icon">
         <i class="nav-icon far fa-newspaper"></i>
     </x-slot>
