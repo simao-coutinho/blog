@@ -14,7 +14,7 @@ class LatestBlog extends Component
      */
     public function render()
     {
-        $blogs = Blog::whereDeleted(false)->whereState(true)->where('date', ">=", "NOW()")->orderByDesc('created_at')->limit(3)->get();
+        $blogs = Blog::whereDeleted(false)->whereState(true)->where('date', ">=", "NOW()")->orderByDesc('date')->limit(3)->get();
 
         return view('blog::components.latest-blog', [
             'latestBlogs' => $blogs
