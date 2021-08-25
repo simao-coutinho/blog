@@ -14,7 +14,7 @@ class BlogFeatured extends Component
      */
     public function render()
     {
-        $blogFeatureds = Blog::whereDeleted(false)->whereState(true)->where('date', ">=", "NOW()")->whereFeatured(true)->limit(4)->get();
+        $blogFeatureds = Blog::whereDeleted(false)->whereState(true)->where('date', ">=", "NOW()")->whereFeatured(true)->limit(3)->get();
 
         return view('blog::components.blog-featured', [
             'blogFeatureds' => $blogFeatureds
